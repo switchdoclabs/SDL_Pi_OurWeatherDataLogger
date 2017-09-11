@@ -125,6 +125,9 @@ def readOURWEATHERData(password):
 
 # OURWEATHER graph building routine
 
+def CtoF(celcius):
+	
+	return celcius*1.8 +32.0
 
 
 
@@ -157,9 +160,9 @@ def buildOURWEATHERGraphTemperature(password, myGraphSampleCount):
 
 		for record in result:
 			t.append(record[0])
-			u.append(record[2])
+			u.append(CtoF(record[2]))
 			v.append(record[3])
-			averageTemperature = averageTemperature+record[2]
+			averageTemperature = averageTemperature+ CtoF(record[2])
 			currentCount=currentCount+1
 			StationName = record[4]
 
@@ -184,18 +187,18 @@ def buildOURWEATHERGraphTemperature(password, myGraphSampleCount):
 		ax.xaxis.set_major_formatter(hfmt)
 		pyplot.xticks(rotation='45')
 		pyplot.subplots_adjust(bottom=.3)
-		pylab.plot(t, u, color='r',label="Outside Temp (C) ",linestyle="-",marker=".")
+		pylab.plot(t, u, color='r',label="Outside Temp (F) ",linestyle="-",marker=".")
 		pylab.xlabel("Time")
-		pylab.ylabel("degrees C")
+		pylab.ylabel("degrees F")
 		pylab.legend(loc='upper left')
-		pylab.axis([min(t), max(t), -20, 50])
+		pylab.axis([min(t), max(t), -20, 110])
 
 		ax2 = pylab.twinx()
 		pylab.ylabel("% ")
 		pylab.plot(t, v, color='b',label="Outside Hum %",linestyle="-",marker=".")
 		pylab.axis([min(t), max(t), 0, 100])
 		pylab.legend(loc='lower left')
-		pylab.figtext(.5, .05, ("%s Average Temperature %6.2f\n%s") %( StationName, averageTemperature, datetime.now()),fontsize=18,ha='center')
+		pylab.figtext(.5, .05, ("%s Average Temperature %6.2f F\n%s") %( StationName, averageTemperature, datetime.now()),fontsize=18,ha='center')
 		pylab.grid(True)
 
 		pyplot.show()
@@ -212,6 +215,10 @@ def buildOURWEATHERGraphTemperature(password, myGraphSampleCount):
 		gc.collect()
 		print "------OURWEATHERGraphTemperature finished now"
 
+
+def kph2mph(kph):
+
+	return kph/1.609344
 
 def buildOURWEATHERGraphWind(password, myGraphSampleCount):
     		print('buildOURWEATHERGraph - The time is: %s' % datetime.now())
@@ -242,9 +249,9 @@ def buildOURWEATHERGraphWind(password, myGraphSampleCount):
 
 		for record in result:
 			t.append(record[0])
-			u.append(record[2])
+			u.append(kph2mph(record[2]))
 			#v.append(record[3])
-			averageWindSpeed = averageWindSpeed+record[2]
+			averageWindSpeed = averageWindSpeed+kph2mph(record[2])
 			currentCount=currentCount+1
 			StationName = record[4]
 
@@ -269,13 +276,13 @@ def buildOURWEATHERGraphWind(password, myGraphSampleCount):
 		ax.set_ylim(bottom = -200.0)
 		pyplot.xticks(rotation='45')
 		pyplot.subplots_adjust(bottom=.3)
-		pylab.plot(t, u, color='r',label="Wind Speed (kph)" ,linestyle="o",marker=".")
-		#pylab.plot(t, v, color='b',label="Wind Gust (kph)" ,linestyle="o",marker=".")
+		pylab.plot(t, u, color='r',label="Wind Speed (MPH)" ,linestyle="o",marker=".")
+		#pylab.plot(t, v, color='b',label="Wind Gust (MPH)" ,linestyle="o",marker=".")
 		pylab.xlabel("Time")
-		pylab.ylabel("Wind (kph)")
+		pylab.ylabel("Wind (MPH)")
 		pylab.legend(loc='lower center')
 		pylab.axis([min(t), max(t), min(u)-20, max(u)+20])
-		pylab.figtext(.5, .05, ("%s Average Windspeed %6.2f\n%s") %( StationName, averageWindSpeed, datetime.now()),fontsize=18,ha='center')
+		pylab.figtext(.5, .05, ("%s Average Windspeed %6.2f MPH\n%s") %( StationName, averageWindSpeed, datetime.now()),fontsize=18,ha='center')
 
 		pylab.grid(True)
 
