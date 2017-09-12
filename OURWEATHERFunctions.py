@@ -20,6 +20,7 @@ import sys
 
 from pytz import timezone
 
+from dateutil import tz
 import httplib2 as http
 import json
 
@@ -172,8 +173,8 @@ def buildOURWEATHERGraphTemperature(password, myGraphSampleCount):
 
 		fds = dates.date2num(t) # converted
 		# matplotlib date format object
-		hfmt = dates.DateFormatter('%H:%M:%S')
-		#hfmt = dates.DateFormatter('%m/%d-%H')
+		#hfmt = dates.DateFormatter('%H:%M:%S',tz=tz.gettz('US/Pacific'))
+		hfmt = dates.DateFormatter('%m/%d-%H' ,tz=tz.gettz('US/Pacific'))
 
 		fig = pyplot.figure()
 		fig.set_facecolor('white')
@@ -188,7 +189,7 @@ def buildOURWEATHERGraphTemperature(password, myGraphSampleCount):
 		pyplot.xticks(rotation='45')
 		pyplot.subplots_adjust(bottom=.3)
 		pylab.plot(t, u, color='r',label="Outside Temp (F) ",linestyle="-",marker=".")
-		pylab.xlabel("Time")
+		pylab.xlabel("Time(Pacific)")
 		pylab.ylabel("degrees F")
 		pylab.legend(loc='upper left')
 		pylab.axis([min(t), max(t), -20, 110])
@@ -261,8 +262,8 @@ def buildOURWEATHERGraphWind(password, myGraphSampleCount):
 
 		fds = dates.date2num(t) # converted
 		# matplotlib date format object
-		hfmt = dates.DateFormatter('%H:%M:%S')
-		#hfmt = dates.DateFormatter('%m/%d-%H')
+		#hfmt = dates.DateFormatter('%H:%M:%S')
+		hfmt = dates.DateFormatter('%m/%d-%H' ,tz=tz.gettz('US/Pacific'))
 
 		fig = pyplot.figure()
 		fig.set_facecolor('white')
@@ -278,7 +279,7 @@ def buildOURWEATHERGraphWind(password, myGraphSampleCount):
 		pyplot.subplots_adjust(bottom=.3)
 		pylab.plot(t, u, color='r',label="Wind Speed (MPH)" ,linestyle="o",marker=".")
 		#pylab.plot(t, v, color='b',label="Wind Gust (MPH)" ,linestyle="o",marker=".")
-		pylab.xlabel("Time")
+		pylab.xlabel("Time (Pacific)")
 		pylab.ylabel("Wind (MPH)")
 		pylab.legend(loc='lower center')
 		pylab.axis([min(t), max(t), min(u)-20, max(u)+20])
